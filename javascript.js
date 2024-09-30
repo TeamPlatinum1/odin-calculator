@@ -25,7 +25,6 @@ function operate(operation){
     }
 }
 
-
 function add(a, b){
     return a + b;
 }
