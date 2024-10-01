@@ -48,6 +48,7 @@ body {
     font-size: 64px;
     color: #E6E6E6;
     text-align: right;
+    overflow: auto;
 }
 
 #buttons {
