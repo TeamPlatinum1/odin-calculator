@@ -51,10 +51,13 @@ operatorBtns.forEach((btn) => {
         }else{
             if(clearDisplayOnInput){
                 display.textContent = NaN;
+                operationInput = new operation(NaN, NaN, "+");
             }else{
                 operateInput();
+                clearDisplayOnInput = true;
+                operationInput = new operation(+display.textContent, NaN, event.target.textContent);
             }
-            operationInput = new operation(NaN, NaN, "+");
+            
         }
     });
 });
@@ -70,6 +73,7 @@ equalsBtn.addEventListener("click", () => {
 
 clearBtn.addEventListener("click", () => {
     display.textContent = "";
+    clearDisplayOnInput = false;
     operationInput = new operation(NaN, NaN, "+");
 });
 
