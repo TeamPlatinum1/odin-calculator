@@ -94,7 +94,8 @@ body {
     font-size: 32px;
 }
 
-.big-button:hover {
+.big-button:hover,
+.operator-button:focus {
     cursor: pointer;
     animation-name: button-hover-in;
     animation-duration: 0.1s;

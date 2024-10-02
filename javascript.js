@@ -6,7 +6,7 @@ const numBlock = document.querySelector("#num-block");
 const operatorBtns = document.querySelectorAll(".operator-button");
 const equalsBtn = document.querySelector("#equals-button");
 const clearBtn = document.querySelector("#clear-button");
-const signBtn = document.querySelector("#clear-button");
+const signBtn = document.querySelector("#sign-button");
 const display = document.querySelector("#display");
 
 class operation {
@@ -31,10 +31,11 @@ numBlock.addEventListener("click", (event) => {
 
     switch(event.target.id){
         case "delete-button":
-                display.textContent = display.textContent.slice(0, -1);
+            display.textContent = display.textContent.slice(0, -1);
             break;
         case "comma-button":
-            return;
+            display.textContent += display.textContent.includes(".") ? "" : ".";
+            break;
         default:
         display.textContent += event.target.textContent;
     }
@@ -51,10 +52,9 @@ operatorBtns.forEach((btn) => {
             if(clearDisplayOnInput){
                 display.textContent = NaN;
             }else{
-                operationInput.num2 = +display.textContent;
-                display.textContent = operate(operationInput);
-                operationInput = new operation(NaN, NaN, "+");
+                operateInput();
             }
+            operationInput = new operation(NaN, NaN, "+");
         }
     });
 });
@@ -63,17 +63,45 @@ equalsBtn.addEventListener("click", () => {
     if(clearDisplayOnInput){
         display.textContent = NaN;
     }else{
-        operationInput.num2 = +display.textContent;
-        display.textContent = operate(operationInput);
-        operationInput = new operation(NaN, NaN, "+");
+        operateInput();
     }
+    operationInput = new operation(NaN, NaN, "+");
 });
+
+clearBtn.addEventListener("click", () => {
+    display.textContent = "";
+    operationInput = new operation(NaN, NaN, "+");
+});
+
+signBtn.addEventListener("click", () => {
+    display.textContent = (-(+display.textContent));
+});
+
+function operateInput(){
+    operationInput.num2 = +display.textContent;
+    display.textContent = roundToDecimals(operate(operationInput), 3);
+}
 
 function clearDisplay(){
     display.textContent = "";
 }
 
+function roundToDecimals(number, decimals){
+    if(isNaN(number))
+        return number;
+
+    if(Math.floor(number) !== number){
+        if(number.toString().split(".")[1].length > decimals){
+            return number.toFixed(4);
+        }
+    }
+    return number;
+}
+
 function operate(operation){
+    if(isNaN(operation.num1))
+        return operation.num2;
+
     switch(operation.operator){
         case "+":
             return add(operation.num1, operation.num2);
@@ -103,9 +131,12 @@ function multiply(a, b){
 }
 
 function divide(a, b){
+    if(b === 0)
+        return "lol";
     return a / b;
 }
 
 function modulo(a, b){
     return a % b;
 }
+
